@@ -1,0 +1,29 @@
+// Colors
+$gray: #eee;
+
+// Angular
+[ng-click] {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.app-silos > div {
+  box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.75);
+}
+
+// Main content bg color
+md-content[class*="-theme"] {
+  background-color: $gray;
+}
+
+.text-center {
+  text-align: center;
+}
+md-toolbar {
+  &.md-short {
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+  }
+}
