@@ -5,7 +5,7 @@ md-list-item.md-3-line.md-long-text {
 }
 
 md-card-actions {
-  margin: 8px 0 0 0 !important;
+  margin: 8px 4px 0 4px !important;
   padding: 0 !important;
   &,
   & * {
@@ -15,6 +15,9 @@ md-card-actions {
   md-icon {
     height: 16px;
     width: 16px;
+  }
+  .md-button {
+    font-size: 10px;
   }
 }
 

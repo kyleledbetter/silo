@@ -1,7 +1,10 @@
 /**
  * App-wide Styles
  */
-
+div[ui-view] {
+  height: 97%;
+  min-height: 97%;
+}
  .main-shell {
    .profile-container {
      height: 100%;
