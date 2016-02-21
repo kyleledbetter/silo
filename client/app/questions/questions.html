@@ -1,104 +1,167 @@
-<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
-  <md-toolbar class="md-tall md-primary">
-
-    <div ng-if="isLoggedIn()" layout="column" layout-padding class="profile-container">
-      <div flex></div>
-      <div layout-padding layout="column">
-        <div class="profile-name">{{ getCurrentUser().name }}</div>
-        <div class="profile-email">{{ getCurrentUser().email }}</div>
-      </div>
-    </div>
-
-  </md-toolbar>
-  <md-content layout-padding>
-
-  </md-content>
-</md-sidenav>
-<md-content layout="column" flex layout-fill>
-  <md-toolbar>
+<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+  <md-toolbar class="md-hue-2">
     <div class="md-toolbar-tools">
-      <md-button ng-click="toggleLeft()" class="md-icon-button" aria-label="Settings">
-        <md-icon md-svg-icon="assets/icons/menu.svg"></md-icon>
+      <h2>Questions &amp; Answers</h2>
+    </div>
+  </md-toolbar>
+  <md-list flex>
+    <md-list-item class="md-2-line" ng-repeat="item in menu" role="link" md-ink-ripple>
+      <md-icon md-svg-icon="{{item.icon}}" aria-label="{{item.title}}"></md-icon>
+      <div class="md-list-item-text">
+        <span class="md-body-2">{{item.title}}</span>
+      </div>
+    </md-list-item>
+    <md-divider></md-divider>
+    <md-subheader  class="md-no-sticky">Management</md-subheader>
+    <md-list-item class="md-2-line" ng-repeat="item in admin" role="link" md-ink-ripple>
+      <md-icon md-svg-icon="{{item.icon}}" aria-label="{{item.title}}"></md-icon>
+      <div class="md-list-item-text">
+        <span class="md-body-2">{{item.title}}</span>
+      </div>
+    </md-list-item>
+  </md-list>
+</md-sidenav>
+<div layout="column" class="relative" layout-fill role="main">
+  <md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="showAdd($event)">
+    <md-icon md-svg-icon="content:add" aria-label="Plus"></md-icon>
+  </md-button>
+  <md-toolbar class="animate-show md-whiteframe-z1" ng-show="!showSearch">
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" ng-click="toggleSidenav('left')" aria-label="Menu">
+        <md-icon md-svg-icon="navigation:menu" aria-label="Menu"></md-icon>
       </md-button>
-      <h2>
-          <span>Questions &amp; Answers</span>
-        </h2>
-      <span flex=""></span>
-      <md-menu>
-        <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
-          <md-icon md-menu-origin md-svg-icon="assets/icons/dots-vertical.svg"></md-icon>
-        </md-button>
-        <md-menu-content width="4">
-          <md-menu-item>
-            <md-button ng-click="showAddDialog($event)">
-              <md-icon md-svg-icon="content:add" md-menu-align-target></md-icon>
-              Add
-            </md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button ng-click="redial($event)">
-              <md-icon md-svg-icon="communication:dialpad" md-menu-align-target></md-icon>
-              Redial
-            </md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button disabled="disabled" ng-click="checkVoicemail()">
-              <md-icon md-svg-icon="communication:voicemail"></md-icon>
-              Check voicemail
-            </md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button ng-click="toggleNotifications()">
-              <md-icon md-svg-icon="social:notifications{{notificationsEnabled ? '_off' : ''}}"></md-icon>
-              {{notificationsEnabled ? 'Disable' : 'Enable' }} notifications
-            </md-button>
-          </md-menu-item>
+      <h3>
+        <span hide-gt-md>Questions &amp; Answers</span>
+        <span hide-xs hide-sm hide-md>Q&amp;A</span>
+      </h3>
+      <span flex></span>
+      <md-button class="md-icon-button" aria-label="Search" ng-click="toggleSearch()">
+        <md-icon md-svg-icon="action:search" aria-label="Search"></md-icon>
+      </md-button>
+      <md-button class="md-icon-button" aria-label="Open Settings" ng-click="showListBottomSheet($event)">
+        <md-icon md-svg-icon="navigation:more_vert" aria-label="More"></md-icon>
+      </md-button>
+    </div>
+    <span flex></span>
+    <md-tabs md-stretch-tabs="always" md-selected="data.selectedIndex">
+      <md-tab id="tab1" aria-controls="tab1-content">
+        Answered
+      </md-tab>
+      <md-tab id="tab2" aria-controls="tab2-content">
+        Bookmarked
+      </md-tab>
+    </md-tabs>
+  </md-toolbar>
+  <md-toolbar ng-show="showSearch" class="animate-show md-hue-1 md-whiteframe-z1">
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" ng-click="toggleSearch()" aria-label="Menu">
+        <md-icon md-svg-icon="navigation:arrow_back" aria-label="Back"></md-icon>
+      </md-button>
+      <h3 role="button" ng-click="toggleSearch()">
+        Back
+      </h3>
+      <span flex="5"></span>
+      <span flex>
+        <md-autocomplete md-theme="input"
+          md-input-name="autocompleteField"
+          md-no-cache="ctrl.noCache"
+          md-selected-item="ctrl.selectedItem"
+          md-search-text="ctrl.searchText"
+          md-items="item in ctrl.querySearch(ctrl.searchText)"
+          md-item-text="item.display"
+          placeholder="Search">
+          <md-item-template>
+            <span md-highlight-text="ctrl.searchText">{{item.display}}</span>
+          </md-item-template>
+          <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
+            <div ng-message="required">You <b>must</b> have a favorite state.</div>
+            <div ng-message="minlength">Your entry is not long enough.</div>
+            <div ng-message="maxlength">Your entry is too long.</div>
+          </div>
+        </md-autocomplete>
+      </span>
 
-          <md-menu-divider></md-menu-divider>
-          <md-menu-item ng-hide="isLoggedIn()" ui-sref="login">
-            <md-button>
-              <md-icon md-svg-icon="action:input"></md-icon>
-              Login
-            </md-button>
-          </md-menu-item>
-          <md-menu-item ng-hide="isLoggedIn()" ui-sref="signup">
-            <md-button>
-              <md-icon md-svg-icon="action:launch"></md-icon>
-              Signup
-            </md-button>
-          </md-menu-item>
-          <md-menu-item ng-show="isLoggedIn()">
-            <md-button ng-click="logout()">
-              <md-icon md-svg-icon="action:exit_to_app"></md-icon>
-              Logout
-            </md-button>
-          </md-menu-item>
-
-        </md-menu-content>
-      </md-menu>
     </div>
   </md-toolbar>
   <md-content flex>
-    <md-card>
-      <md-list>
-        <md-list-item class="md-3-line" ng-repeat="item in activity | filter:search">
-          <md-icon class="md-avatar" md-svg-icon="avatar:svg-{{ ($index + 1) % 11 }}"></md-icon>
-          <div class="md-list-item-text">
-            <h3>{{item.what}}</h3>
-            <h4>{{item.who}}</h4>
-            <p>{{item.notes}}</p>
+    <ui-view layout="column" layout-fill>
+        <ng-switch on="data.selectedIndex" class="tabpanel-container">
+          <div role="tabpanel"
+               id="tab1-content"
+               aria-labelledby="tab1"
+               ng-switch-when="0"
+               md-swipe-left="next()"
+               md-swipe-right="previous()">
+            <div>
+              <md-card ng-repeat="item in activity | filter:search">
+                <div class="inset">
+                  <div class="md-title">{{item.what}}</div>
+                  <div class="md-body-1">in <a ui-sref="#">category name</a></div>
+                </div>
+                <md-divider></md-divider>
+                <md-list>
+                  <md-list-item class="md-3-line md-long-text">
+                    <md-icon class="md-avatar" hide-sm md-svg-icon="avatar:svg-{{ ($index + 1) % 11 }}"></md-icon>
+                    <div class="md-list-item-text">
+                      <h3>{{item.who}}</h3>
+                      <p>{{item.notes}}</p>
+                    </div>
+                  </md-list-item>
+                  <md-divider></md-divider>
+                  <md-card-actions layout="row" layout-align="space-around center">
+                    <md-button>
+                      <md-icon md-svg-icon="action:thumb_up" aria-label="Forward"></md-icon>
+                      <span>12 likes</span>
+                    </md-button>
+                    <md-button>
+                      <md-icon md-svg-icon="communication:forum" aria-label="Forward"></md-icon>
+                      <span>4 comments</span>
+                    </md-button>
+                    <md-button>
+                      <md-icon md-svg-icon="device:access_time" aria-label="Forward"></md-icon>
+                      <span>4hrs ago</span>
+                    </md-button>
+                  </md-card-actions>
+                </md-list>
+              </md-card>
+            </div>
           </div>
-          <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
-          <md-divider hide-gt-sm ng-if="!$last"></md-divider>
-        </md-list-item>
-        <md-divider></md-divider>
-        <md-list-item>
-          <md-button class="md-primary">
-            <md-icon md-svg-icon="navigation:ic_arrow_forward_24px" aria-label="Forward"></md-icon>
-            <span>More</span>
-          </md-button>
-        </md-list-item>
-      </md-list>
-    </md-card>
+          <div role="tabpanel"
+               id="tab2-content"
+               aria-labelledby="tab2"
+               ng-switch-when="1"
+               md-swipe-left="next()"
+               md-swipe-right="previous()"
+               layout="row" layout-align="center center">
+            <div flex-gt-sm="90" flex-gt-md="80">
+              <h2 class="md-title inset">Favorites</h2>
+              <md-card>
+                <md-list>
+                  <md-list-item class="md-3-line" ng-repeat="item in activity | filter:search | orderBy:'-what'">
+                    <md-icon class="md-avatar" hide-sm md-svg-icon="avatar:svg-{{ ($index + 1) % 11 }}"></md-icon>
+                    <div class="md-list-item-text">
+                      <h3>{{item.what}}</h3>
+                      <h4>{{item.who}}</h4>
+                      <p>{{item.notes}}</p>
+                    </div>
+                    <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
+                    <md-divider hide-gt-sm ng-if="!$last"></md-divider>
+                  </md-list-item>
+                  <md-divider></md-divider>
+                  <md-list-item>
+                    <md-button class="md-primary">
+                      <md-icon md-svg-icon="navigation:arrow_forward" aria-label="Forward"></md-icon>
+                      <span>More</span>
+                    </md-button>
+                  </md-list-item>
+                </md-list>
+              </md-card>
+            </div>
+
+          </div>
+
+      </ng-switch>
+
+    </ui-view>
   </md-content>
-</md-content>
+</div>

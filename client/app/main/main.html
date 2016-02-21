@@ -1,6 +1,7 @@
 <div ng-include="'components/shell/shell.html'"></div>
 
 <div layout="row" flex layout-fill class="app-silos">
+  <div flex ng-include="'app/tasks/tasks.html'" md-theme="tasks" layout layout-fill ng-controller="TasksCtrl"></div>
   <div flex ng-include="'app/questions/questions.html'" md-theme="questions" layout layout-fill ng-controller="QuestionsCtrl"></div>
   <div flex ng-include="'app/files/files.html'" md-theme="files" layout layout-fill ng-controller="QuestionsCtrl"></div>
   <div flex ng-include="'app/directory/directory.html'" md-theme="directory" layout layout-fill ng-controller="QuestionsCtrl"></div>

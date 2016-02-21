@@ -1,0 +1,28 @@
+md-list-item.md-3-line.md-long-text {
+  margin-top: 10px !important;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+md-card-actions {
+  margin: 8px 0 0 0 !important;
+  padding: 0 !important;
+  &,
+  & * {
+    color: gray;
+    fill: gray;
+  }
+  md-icon {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+// Round avatar
+.md-avatar {
+  height: 40px;
+  width: 40px !important;
+  & > svg {
+    border-radius: 50%;
+  }
+}

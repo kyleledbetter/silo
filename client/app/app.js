@@ -12,7 +12,7 @@ angular.module('siloApp', [
 ])
   .config(function($mdThemingProvider) {
     var defaultMap = $mdThemingProvider.extendPalette('blue-grey', {
-      'contrastDefaultColor': 'dark',
+      'contrastDefaultColor': 'light',
     });
     $mdThemingProvider.definePalette('customPrimary', defaultMap);
     $mdThemingProvider.theme('default')
@@ -22,17 +22,30 @@ angular.module('siloApp', [
     })
     .accentPalette('pink');
     $mdThemingProvider.theme('input', 'default')
-        .primaryPalette('grey')
+    .primaryPalette('grey')
     $mdThemingProvider.theme('directory')
-    .primaryPalette('blue');
+    .primaryPalette('deep-orange')
+    .accentPalette('orange');
     $mdThemingProvider.theme('events')
     .primaryPalette('red');
+    var customGreenMap = 		$mdThemingProvider.extendPalette('green', {
+      'contrastDefaultColor': 'light',
+      'contrastDarkColors': ['50'],
+      '50': 'ffffff'
+    });
+    $mdThemingProvider.definePalette('customGreen', customGreenMap);
     $mdThemingProvider.theme('files')
-    .primaryPalette('teal');
+    .primaryPalette('customGreen', {
+      'default': '600',
+      'hue-1': '50'
+    })
+    .accentPalette('light-green');
     $mdThemingProvider.theme('questions')
-    .primaryPalette('purple');
+    .primaryPalette('blue')
+    .accentPalette('light-blue');
     $mdThemingProvider.theme('tasks')
-    .primaryPalette('indigo');
+    .primaryPalette('deep-purple')
+    .accentPalette('purple');
     $mdThemingProvider.theme('wiki')
     .primaryPalette('brown');
   })

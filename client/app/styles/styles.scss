@@ -8,8 +8,14 @@ $gray: #eee;
   }
 }
 
-.app-silos > div {
-  box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.75);
+.app-silos {
+  & > div {
+    position: relative;
+  }
+  & > div:not(:first-of-type),
+  & > div:not(:last-of-type) {
+    border-right: 1px solid #37474F;
+  }
 }
 
 // Main content bg color
